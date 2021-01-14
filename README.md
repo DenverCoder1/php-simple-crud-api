@@ -1,6 +1,6 @@
 # PHP Simple CRUD API
 
-Simple API for storing and retrieving labeled
+Simple API for storing and retrieving labeled data.
 
 ## Create
 
