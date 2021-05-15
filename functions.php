@@ -20,7 +20,7 @@ function readJSON($file): array
         // create data.json file
         file_put_contents($file, encodeJSON($data));
     }
-    
+
     return $data;
 }
 
@@ -47,7 +47,7 @@ function encodeJSON($data): string
 // show single entry if key is not null
 function getEntryOrTag($file, $tag, $key): array
 {
-    $data = readJSON($file, $tag, $key);
+    $data = readJSON($file);
 
     if ($tag !== null) {
         // found the tag to filter by
@@ -92,7 +92,7 @@ function getEntryOrTag($file, $tag, $key): array
 function addEntry($file, $tag, $key, $value): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
 
     // create tag if it is missing
     if (!array_key_exists($tag, $data)) {
@@ -126,7 +126,7 @@ function addEntry($file, $tag, $key, $value): array
 function updateEntry($file, $tag, $key, $value): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
 
     // check that tag exists
     if (!array_key_exists($tag, $data)) {
@@ -162,7 +162,7 @@ function updateEntry($file, $tag, $key, $value): array
 function deleteEntry($file, $tag, $key): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
 
     // delete entry
     if (array_key_exists($tag, $data) && array_key_exists($key, $data[$tag])) {

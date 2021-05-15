@@ -6,6 +6,16 @@ $configs = include("../config.php");
 
 $file = $configs["json_path"];
 
-$params = validateParams(["tag" => "required", "key" => "required"]);
+$params = validateParams([
+    "tag" => "required",
+    "key" => "required"
+]);
 
-echo encodeJSON(deleteEntry($file, $params["tag"], $params["key"]));
+// check the secret for deleting if it is set
+if (isset($configs["secret"]) && $configs["secret"] != "") {
+    $paramsToCheck["secret"] = "required";
+}
+
+$response = deleteEntry($file, $params["tag"], $params["key"]);
+
+echo encodeJSON($response);
