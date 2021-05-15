@@ -203,3 +203,14 @@ function validateParams($params): array
     }
     return $validated;
 }
+
+// exits with an error message if the value does not match the secret
+function validateSecret($value, $secret)
+{
+    if ($value != $secret) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "The secret does not match",
+        ]));
+    }
+}

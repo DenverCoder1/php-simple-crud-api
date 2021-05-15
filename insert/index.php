@@ -19,6 +19,11 @@ if (isset($configs["secret"]) && $configs["secret"] != "") {
 
 $params = validateParams($paramsToCheck);
 
+// check that secret is correct
+if (isset($params["secret"])) {
+    validateSecret($params["secret"], $configs["secret"]);
+}
+
 $response = addEntry($file, $params["tag"], $params["key"], $params["value"]);
 
 echo encodeJSON($response);
