@@ -22,6 +22,7 @@ Simple API for storing and retrieving labeled data.
   - [Example request](#example-request-2)
   - [Successful response](#successful-response-3)
   - [Unsuccessful response](#unsuccessful-response-3)
+  - [⚙️ Config](#️-config)
 
 ## ✏️ Create
 
@@ -291,3 +292,19 @@ Simple API for storing and retrieving labeled data.
   }
 }
 ```
+
+### ⚙️ Config
+
+#### Configuration options
+
+| Option               | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `secret` (string)    | Secret key for preventing others from modifying your data (leave blank for no secret) |
+| `private` (boolean)  | Whether or not the secret key is required for *reading* the data                      |
+| `json_path` (string) | Path for storing the data file                                                        |
+
+#### Using secrets
+
+In `config.php`, you can set a **secret** which will be a required parameter passed in the URL for insertion, updates, and deletion (eg. `...&secret=example`).
+
+To require the secret parameter to be passed even when reading data, set **private** to true.
