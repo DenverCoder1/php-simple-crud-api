@@ -164,10 +164,26 @@ function deleteEntry($file, $tag, $key): array
     // load json
     $data = readJSON($file);
 
-    // delete entry
-    if (array_key_exists($tag, $data) && array_key_exists($key, $data[$tag])) {
-        unset($data[$tag][$key]);
+    // check that tag exists
+    if (!array_key_exists($tag, $data)) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "tag '$tag' does not exist",
+            "data" => $data,
+        ]));
     }
+
+    // check that key exists
+    if (!array_key_exists($key, $data[$tag])) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "key '$key' does not exist in tag '$tag'",
+            "data" => $data,
+        ]));
+    }
+
+    // delete entry
+    unset($data[$tag][$key]);
 
     // overwrite file
     writeJSON($file, $data);
