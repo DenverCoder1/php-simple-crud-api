@@ -20,7 +20,7 @@ function readJSON($file): array
         // create data.json file
         file_put_contents($file, encodeJSON($data));
     }
-    
+
     return $data;
 }
 
@@ -47,7 +47,7 @@ function encodeJSON($data): string
 // show single entry if key is not null
 function getEntryOrTag($file, $tag, $key): array
 {
-    $data = readJSON($file, $tag, $key);
+    $data = readJSON($file);
 
     if ($tag !== null) {
         // found the tag to filter by
@@ -92,7 +92,7 @@ function getEntryOrTag($file, $tag, $key): array
 function addEntry($file, $tag, $key, $value): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
 
     // create tag if it is missing
     if (!array_key_exists($tag, $data)) {
@@ -126,7 +126,7 @@ function addEntry($file, $tag, $key, $value): array
 function updateEntry($file, $tag, $key, $value): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
 
     // check that tag exists
     if (!array_key_exists($tag, $data)) {
@@ -162,12 +162,28 @@ function updateEntry($file, $tag, $key, $value): array
 function deleteEntry($file, $tag, $key): array
 {
     // load json
-    $data = readJSON($file, null, null);
+    $data = readJSON($file);
+
+    // check that tag exists
+    if (!array_key_exists($tag, $data)) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "tag '$tag' does not exist",
+            "data" => $data,
+        ]));
+    }
+
+    // check that key exists
+    if (!array_key_exists($key, $data[$tag])) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "key '$key' does not exist in tag '$tag'",
+            "data" => $data,
+        ]));
+    }
 
     // delete entry
-    if (array_key_exists($tag, $data) && array_key_exists($key, $data[$tag])) {
-        unset($data[$tag][$key]);
-    }
+    unset($data[$tag][$key]);
 
     // overwrite file
     writeJSON($file, $data);
@@ -202,4 +218,15 @@ function validateParams($params): array
         }
     }
     return $validated;
+}
+
+// exits with an error message if the value does not match the secret
+function validateSecret($value, $secret)
+{
+    if ($value != $secret) {
+        die(encodeJSON([
+            "responseType" => "error",
+            "message" => "The secret does not match",
+        ]));
+    }
 }
